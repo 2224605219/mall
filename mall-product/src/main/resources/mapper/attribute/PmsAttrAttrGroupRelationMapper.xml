@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rl.mapper.PmsAttrAttrGroupRelationMapper">
+    <!--品牌关联分类-->
+    <resultMap id="pmsAttrAttrGroupRelationMap" type="com.rl.entity.PmsAttrAttrGroupRelation" >
+        <result column="id" property="id" />
+        <result column="gid" property="pmsAttrGroup.attrGroupId" />
+        <result column="gname" property="pmsAttrGroup.attrGroupName" />
+        <result column="aid" property="pmsAttr.attrId" />
+        <result column="aname" property="pmsAttr.attrName" />
+        <result column="aicon" property="pmsAttr.icon" />
+        <result column="acatelogId" property="pmsAttr.catelogId" />
+        <result column="valueselect" property="pmsAttr.valueSelect" />
+    </resultMap>
+
+    <select id="queryAll" resultMap="pmsAttrAttrGroupRelationMap" >
+        select ag.id id,g.attr_group_id gid,g.attr_group_name gname,a.attr_id aid,a.attr_name aname,a.icon aicon,a.value_select valueselect,a.catelog_id acatelogId from  pms_attr_attrgroup_relation ag , pms_attr_group g ,pms_attr a where ag.attr_id=a.attr_id and ag.attr_group_id=g.attr_group_id and a.enable=1
+    </select>
+
+    <select id="queryByGroupId" resultMap="pmsAttrAttrGroupRelationMap">
+        select ag.id id,g.attr_group_id gid,g.attr_group_name gname,a.attr_id aid,a.attr_name aname,a.icon aicon,a.value_select valueselect,a.catelog_id acatelogId from  pms_attr_attrgroup_relation ag , pms_attr_group g ,pms_attr a where ag.attr_id=a.attr_id and ag.attr_group_id=g.attr_group_id and a.enable=1 and  g.attr_group_id=#{groupId}
+    </select>
+
+    <insert id="insert" >
+        insert into pms_attr_attrgroup_relation (attr_id,attr_group_id) values(#{attrId},#{attrGroupId})
+    </insert>
+
+    <delete id="delete" >
+        delete from pms_attr_attrgroup_relation where id=#{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="bachDel" parameterType="int[]">
+        <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+            : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+        delete from pms_attr_attrgroup_relation where id in
+        <foreach collection="array" item="ids" index="no" open="("
+                 separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+</mapper>

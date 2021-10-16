@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rl.mapper.BrandMapper">
+
+    <resultMap id="brandMap" type="com.rl.entity.Brand">
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="log" property="log" />
+        <result column="introduce" property="introduce" />
+        <result column="sortlevel" property="sortlevel" />
+        <result column="showstate" property="showstate" />
+        <collection property="children" column="cat_id" select="getByParentCid" javaType="List"/>
+    </resultMap>
+
+    <select id="queryAll" resultType="com.rl.entity.Brand">
+        select * from t_brand where state=1
+    </select>
+
+    <select id="getById" parameterType="int" resultType="com.rl.entity.Brand">
+        select * from t_brand where state=1 and id=#{id}
+    </select>
+
+    <insert id="add" >
+        insert into t_brand (name,log,introduce,sortlevel,showstate,state,retrieval) values(#{name},#{log},#{introduce},#{sortlevel},#{showstate},1,#{retrieval})
+    </insert>
+
+    <update id="delete">
+        update t_brand set state=0 where id=#{id}
+    </update>
+
+    <update id="update" >
+        update t_brand set name=#{name},log=#{log},introduce=#{introduce},sortlevel=#{sortlevel},showstate=#{showstate} where id=#{id}
+    </update>
+
+    <!-- 批量删除 -->
+    <delete id="batchDel" parameterType="int[]">
+        <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+            : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+        update t_brand set state=0 where id in
+        <foreach collection="array" item="ids" index="no" open="("
+                 separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+
+</mapper>

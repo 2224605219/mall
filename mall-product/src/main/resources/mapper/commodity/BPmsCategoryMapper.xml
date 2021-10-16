@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rl.mapper.BPmsCategoryMapper">
+
+    <resultMap id="pmsCategoryMap" type="com.rl.entity.BPmsCategory">
+        <result column="cat_id" property="value" javaType="int"/>
+        <result column="name" property="label" javaType="String"/>
+        <collection property="children" column="cat_id" select="getByBParentCid" javaType="List"/>
+    </resultMap>
+
+    <select id="getBPmsCategory" resultMap="pmsCategoryMap">
+        select * from pms_category where parent_cid=0 and show_status=1
+    </select>
+
+    <select id="getByBParentCid" parameterType="int" resultMap="pmsCategoryMap">
+        select * from pms_category where parent_cid=#{parentCid} and show_status=1
+    </select>
+
+    <select id="getByName" parameterType="String" resultType="int">
+        select cat_id from pms_category where name=#{name}
+    </select>
+
+
+
+
+</mapper>
