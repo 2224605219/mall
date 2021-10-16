@@ -11,7 +11,8 @@ import org.apache.ibatis.annotations.Mapper;
  * @crate_time 2021/10/16 15:59
  */
 @Mapper
-public interface PmsSkuInfoMapper extends BaseMapper<PmsSkuInfo> {
+public interface PmsSkuInfoMapper {
+
     void insert(PmsSkuInfo pmsSkuInfo);
 
 
